@@ -53,8 +53,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskList() {
+        for (Task task : taskHashMap.values()) {
+            historyManager.remove(task.getId());
+        }
         taskHashMap.clear();
     }
+
 
     @Override
     public void deleteSubtaskList() {
@@ -65,6 +69,9 @@ public class InMemoryTaskManager implements TaskManager {
                 epicsForStatusUpdate.add(subtask.getEpic());
             }
         }
+        for (Task task : subtaskHashMap.values()) {
+            historyManager.remove(task.getId());
+        }
         subtaskHashMap.clear();
         for (Epic epic : epicsForStatusUpdate) {
             epic.setStatus(TaskStatus.NEW);
@@ -73,7 +80,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicList() {
+        for (Task task : epicHashMap.values()) {
+            historyManager.remove(task.getId());
+        }
         epicHashMap.clear();
+        for (Task task : subtaskHashMap.values()) {
+            historyManager.remove(task.getId());
+        }
         subtaskHashMap.clear();
     }
 

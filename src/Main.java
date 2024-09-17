@@ -67,6 +67,12 @@ public class Main {
      Убедимся, что из истории удалился как сам эпик, так и все его подзадачи
      */
         System.out.println("\n Показать историю : \n" + manager.history());
+     /*
+     Теперь удалим оставшиеся задачу и epic
+     */
+        manager.deleteEpicList();
+        manager.deleteTaskList();
+        System.out.println("\n Показать историю в которой не осталось ничего : \n" + manager.history());
 
     }
 }
