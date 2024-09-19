@@ -3,8 +3,6 @@ package tasks;
 import logic.TaskStatus;
 import logic.TaskType;
 
-import java.time.Duration;
-
 public class Task {
     protected String title;
     protected String description;
