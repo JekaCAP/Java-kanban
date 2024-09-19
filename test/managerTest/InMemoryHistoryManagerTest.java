@@ -24,8 +24,8 @@ public class InMemoryHistoryManagerTest {
         Task task1 = new Task(1, "Задача 1", "Описание 1");
         Task task2 = new Task(2, "Задача 2", "Описание 2");
 
-        historyManager.add(task1);
-        historyManager.add(task2);
+        historyManager.addToHistory(task1);
+        historyManager.addToHistory(task2);
 
         assertEquals(2, historyManager.getHistory().size());
 
@@ -37,9 +37,9 @@ public class InMemoryHistoryManagerTest {
     public void testAddMultipleTimes() {
         Task task = new Task(1, "Задача 1", "Описание 1");
 
-        historyManager.add(task);
-        historyManager.add(task);
-        historyManager.add(task);
+        historyManager.addToHistory(task);
+        historyManager.addToHistory(task);
+        historyManager.addToHistory(task);
 
         assertEquals(1, historyManager.getHistory().size());
     }
@@ -50,13 +50,13 @@ public class InMemoryHistoryManagerTest {
         Task task2 = new Task(2, "Задача 2", "Описание 2");
         Task task3 = new Task(3, "Задача 3", "Описание 3");
 
-        historyManager.add(task1);
-        historyManager.add(task2);
-        historyManager.add(task3);
+        historyManager.addToHistory(task1);
+        historyManager.addToHistory(task2);
+        historyManager.addToHistory(task3);
 
         assertEquals(List.of(task1, task2, task3), historyManager.getHistory());
 
-        historyManager.add(task1);
+        historyManager.addToHistory(task1);
         assertEquals(List.of(task2, task3, task1), historyManager.getHistory());
     }
 }
