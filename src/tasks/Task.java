@@ -67,9 +67,8 @@ public class Task {
     }
 
     public TaskType getTaskType() {
-        return taskType;
+        return TaskType.TASK;
     }
-
 
     @Override
     public String toString() {
