@@ -11,7 +11,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node tail;
 
     @Override
-    public void add(Task task) {
+    public void addToHistory(Task task) {
         if (task != null) {
             if (nodeMap.containsKey(task.getId())) {
                 remove(task.getId());
@@ -85,4 +85,5 @@ public class InMemoryHistoryManager implements HistoryManager {
             this.prev = prev;
         }
     }
+
 }

@@ -66,18 +66,17 @@ public class Task {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ID задачи Task=\"" + id
-                + "\", Название задачи=\"" + title
-                + "\", Описание=\"" + description
-                + "\", Статус=\"" + status + "\""
-                + '}'
-                + "\n";
+    public TaskType getTaskType() {
+        return TaskType.TASK;
     }
 
-    public String toStringFromFile() {
-        return String.format("%s,%s,%s,%s,%s,%s", id, taskType, title, status, description, "");
+    @Override
+    public String toString() {
+        return getId() + "," +
+                getTaskType() + "," +
+                getTitle() + "," +
+                getStatus() + "," +
+                getDescription() + "," + ",";
     }
 
 }

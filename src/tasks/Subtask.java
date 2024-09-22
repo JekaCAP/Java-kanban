@@ -17,11 +17,6 @@ public class Subtask extends Task {
         this.taskType = TaskType.SUBTASK;
     }
 
-    public Subtask(int id, String title, String description, TaskStatus status, Epic epic) {
-        super(id, title, description, status);
-        this.epic = epic;
-        this.taskType = TaskType.SUBTASK;
-    }
 
     public Subtask(int id, String title, String description, Epic epic) {
         super(id, title, description);
@@ -38,17 +33,17 @@ public class Subtask extends Task {
     }
 
     @Override
-    public String toString() {
-        return "ID подзадачи Subtask=\"" + id
-                + "\", Название подзадачи=\"" + title
-                + "\", Описание=\"" + description
-                + "\", Статус=\"" + status + "\""
-                + "\n";
+    public TaskType getTaskType() {
+        return TaskType.SUBTASK;
     }
 
     @Override
-    public String toStringFromFile() {
-        return String.format("%s,%s,%s,%s,%s,%s", id, taskType, title, status, description, epic.getId());
+    public String toString() {
+        return getId() + "," +
+                getTaskType() + "," +
+                getTitle() + "," +
+                getStatus() + "," +
+                getDescription() + "," + getEpic().getId();
     }
 
 }

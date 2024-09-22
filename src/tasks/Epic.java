@@ -37,13 +37,17 @@ public class Epic extends Task {
     }
 
     @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
+
+    @Override
     public String toString() {
-        return "ID задачи Epic=\"" + id
-                + "\", Название задачи=\"" + title
-                + "\", Описание=\"" + description
-                + "\", Идентификаторы подзадач в эпике=\"" + subtaskIdList
-                + "\", Статус=\"" + status + "\""
-                + "\n";
+        return getId() + "," +
+                getTaskType() + "," +
+                getTitle() + "," +
+                getStatus() + "," +
+                getDescription() + ",";
     }
 
 }
