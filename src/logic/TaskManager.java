@@ -4,6 +4,7 @@ import tasks.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -18,6 +19,7 @@ public interface TaskManager {
     HashMap<Integer, Subtask> getSubtasks();
 
     HashMap<Integer, Epic> getEpics();
+
 
     void deleteTaskList();
 
@@ -43,7 +45,11 @@ public interface TaskManager {
 
     void updateEpic(Epic epic);
 
+    Set<Task> getPrioritizedTasks();
+
     List<Task> history();
+
+    boolean isCrossingWith(Task t1, Task t2);
 
 }
 

@@ -14,6 +14,8 @@ public class InMemoryHistoryManagerTest {
 
     private HistoryManager historyManager;
 
+    Task task;
+
     @BeforeEach
     public void setUp() {
         historyManager = new InMemoryHistoryManager();
@@ -58,5 +60,33 @@ public class InMemoryHistoryManagerTest {
 
         historyManager.addToHistory(task1);
         assertEquals(List.of(task2, task3, task1), historyManager.getHistory());
+    }
+
+    @Test
+    void remove() {
+        // Пустая история задач.
+        assertDoesNotThrow(() -> historyManager.remove(1), "Удаление из пустой истории не должно вызывать исключений!");
+
+        // Удаление из истории: начало, середина, конец.
+        task = new Task(1, "Задача 1", "Задача для удаления из начала истории");
+        historyManager.addToHistory(task);
+
+        task = new Task(2, "Задача 2", "Промежуточная задача для тестирования удаления");
+        historyManager.addToHistory(task);
+
+        task = new Task(3, "Задача 3", "Задача для удаления из середины истории");
+        historyManager.addToHistory(task);
+
+        task = new Task(4, "Задача 3", "Задача для удаления с конца истории");
+        historyManager.addToHistory(task);
+
+        historyManager.remove(1);
+        assertEquals(3, historyManager.getHistory().size(), "Задача в начале истории не была удалена!");
+
+        historyManager.remove(3);
+        assertEquals(2, historyManager.getHistory().size(), "Задача из середины истории не была удалена!");
+
+        historyManager.remove(4);
+        assertEquals(1, historyManager.getHistory().size(), "Задача в конце истории не была удалена!");
     }
 }
