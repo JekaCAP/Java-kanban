@@ -68,14 +68,13 @@ public class InMemoryTaskManager implements TaskManager {
         return epicHashMap;
     }
 
-    @Override
+
     public void deleteTaskList() {
         taskHashMap.values().forEach(task -> historyManager.remove(task.getId()));
         taskHashMap.clear();
     }
 
 
-    @Override
     public void deleteSubtaskList() {
         Set<Epic> epicsForStatusUpdate = subtaskHashMap.values().stream()
                 .map(Subtask::getEpic)
@@ -88,7 +87,6 @@ public class InMemoryTaskManager implements TaskManager {
         epicsForStatusUpdate.forEach(epic -> epic.setStatus(TaskStatus.NEW));
     }
 
-    @Override
     public void deleteEpicList() {
         epicHashMap.values().forEach(epic -> historyManager.remove(epic.getId()));
         epicHashMap.clear();
