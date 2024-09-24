@@ -20,6 +20,12 @@ public interface TaskManager {
 
     HashMap<Integer, Epic> getEpics();
 
+    void deleteTaskList();
+
+    void deleteSubtaskList();
+
+    void deleteEpicList();
+
     Task getTaskById(int id);
 
     Subtask getSubtaskById(int id);

@@ -1,9 +1,3 @@
-import logic.Managers;
-import logic.TaskManager;
-
-import logic.TaskStatus;
-import tasks.*;
-
 public class Main {
     public static void main(String[] args) {
 
