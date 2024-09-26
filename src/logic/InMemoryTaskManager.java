@@ -2,6 +2,8 @@ package logic;
 
 import tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -231,13 +233,29 @@ public class InMemoryTaskManager implements TaskManager {
         return new TreeSet<>(prioritizedTasks);
     }
 
-    @Override
-    public boolean isCrossingWith(Task task1, Task task2) {
+    private boolean isCrossingWith(Task task1, Task task2) {
         return isCrossing(task1, task2);
     }
 
     private boolean isCrossing(Task task1, Task task2) {
         return task1.getEndTime().isAfter(task2.getStartTime()) && task1.getStartTime().isBefore(task2.getEndTime());
+    }
+
+    public LocalDateTime calculateEpicEndTime(Epic epic) {
+        List<Subtask> subTasks = new ArrayList<>();
+        for (int id : epic.getSubtaskIdList()) {
+            Subtask subTask = getSubtaskById(id);
+            subTasks.add(subTask);
+        }
+        if (subTasks.isEmpty()) {
+            return epic.getStartTime().plus(Duration.ZERO);
+        }
+
+        Duration totalDuration = Duration.ZERO;
+        for (Subtask st : subTasks) {
+            totalDuration = totalDuration.plus(st.getDuration());
+        }
+        return epic.getStartTime().plus(totalDuration);
     }
 }
 

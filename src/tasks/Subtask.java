@@ -15,13 +15,6 @@ public class Subtask extends Task {
         this.taskType = TaskType.SUBTASK;
     }
 
-    public Subtask(String title, String description, Epic epic, LocalDateTime startTime, Duration duration) {
-        super(title, description, startTime, duration);
-        this.epic = epic;
-        this.taskType = TaskType.SUBTASK;
-        this.status = TaskStatus.NEW;
-    }
-
     public Subtask(String title, String description, TaskStatus status, Epic epic, LocalDateTime startTime, Duration duration) {
         super(title, description, TaskType.SUBTASK, startTime, duration);
         this.status = status;
