@@ -44,6 +44,8 @@ public interface TaskManager {
 
     void updateEpic(Epic epic);
 
+    boolean isCrossingWith(Task t1, Task t2);
+
     Set<Task> getPrioritizedTasks();
 
     List<Task> history();

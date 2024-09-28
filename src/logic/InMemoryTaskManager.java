@@ -210,7 +210,8 @@ public class InMemoryTaskManager implements TaskManager {
         return new TreeSet<>(prioritizedTasks);
     }
 
-    private boolean isCrossingWith(Task task1, Task task2) {
+    @Override
+    public boolean isCrossingWith(Task task1, Task task2) {
         return task1.getEndTime().isAfter(task2.getStartTime()) && task1.getStartTime().isBefore(task2.getEndTime());
     }
 
