@@ -1,6 +1,5 @@
 package network;
 
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
