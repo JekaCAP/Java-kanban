@@ -18,14 +18,14 @@ public class SubtaskTest {
 
     @Test
     public void subtaskCreatorTest() {
-        epic = new Epic("Эпик 1", "Описание эпика");
+        epic = new Epic(1, "Эпик 1", "Описание эпика");
         taskManager.epicCreator(epic);
         subtask = new Subtask("Подзадача 1", "Описание подзадачи", epic);
         taskManager.subtaskCreator(subtask);
 
-        assertEquals(taskManager.getSubtaskById(2).getTitle(), subtask.getTitle());
-        assertEquals(taskManager.getSubtaskById(2).getDescription(), subtask.getDescription());
-        assertEquals(taskManager.getSubtaskById(2).getStatus(), TaskStatus.NEW);
+        assertEquals(taskManager.getSubtaskById(1).getTitle(), subtask.getTitle());
+        assertEquals(taskManager.getSubtaskById(1).getDescription(), subtask.getDescription());
+        assertEquals(taskManager.getSubtaskById(1).getStatus(), TaskStatus.NEW);
         assertEquals("Подзадача 1", subtask.getTitle());
         assertEquals("Описание подзадачи", subtask.getDescription());
         assertEquals(1, taskManager.getSubtasks().size(), "Количество задач в менеджере после добавления новой задачи не верно!");

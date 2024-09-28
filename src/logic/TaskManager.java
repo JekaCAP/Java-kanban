@@ -4,6 +4,7 @@ import tasks.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -42,6 +43,8 @@ public interface TaskManager {
     void updateSubtask(Subtask subtask);
 
     void updateEpic(Epic epic);
+
+    Set<Task> getPrioritizedTasks();
 
     List<Task> history();
 

@@ -1,18 +1,17 @@
 package tasks;
 
-import logic.TaskStatus;
+import logic.InMemoryTaskManager;
 import logic.TaskType;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskIdList;
 
-    public Epic(String title, String description) {
-        super(title, description, null);
-        subtaskIdList = new ArrayList<>();
-        this.taskType = TaskType.EPIC;
-    }
+    private LocalDateTime startTime;
 
     public Epic(Integer id, String title, String description) {
         super(id, title, description, null);
@@ -20,12 +19,18 @@ public class Epic extends Task {
         this.taskType = TaskType.EPIC;
     }
 
-    public Epic(Integer id, String title, TaskStatus status, String description) {
-        super(id, title, description, null);
-        subtaskIdList = new ArrayList<>();
-        this.taskType = TaskType.EPIC;
-        this.status = status;
+    @Override
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
+    public LocalDateTime getEndTime(InMemoryTaskManager taskManager) {
+        // Вызов метода из TaskManager
+        return taskManager.calculateEpicEndTime(this);
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
     public ArrayList<Integer> getSubtaskIdList() {
@@ -47,7 +52,10 @@ public class Epic extends Task {
                 getTaskType() + "," +
                 getTitle() + "," +
                 getStatus() + "," +
-                getDescription() + ",";
+                getDescription() + ",," +
+                getStartTime() + "," +
+                (getDuration() == Duration.ZERO ? "" : getDuration());
+
     }
 
 }
