@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int idGenerator = 0;
@@ -21,13 +22,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void taskCreator(Task task) {
         checkId(task);
         taskHashMap.put(task.getId(), task);
-        if (task.getStartTime() != null) {
-            if (prioritizedTasks.stream().anyMatch(prioritizedTask -> isCrossingWith(prioritizedTask, task))) {
-                System.out.println("Задача пересекается с другой.");
-            } else {
-                prioritizedTasks.add(task);
-            }
-        }
+        checkTask(task);
     }
 
 
@@ -40,13 +35,8 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getSubtaskIdList().add(subtask.getId());
             updateEpic(epic);
         }
-        if (subtask.getStartTime() != null) {
-            if (prioritizedTasks.stream().anyMatch(prioritizedTask -> isCrossingWith(prioritizedTask, subtask))) {
-                System.out.println("Подзадача пересекается с другой.");
-            } else {
-                prioritizedTasks.add(subtask);
-            }
-        }
+        refreshDates(subtask.getEpic());
+        checkTask(subtask);
     }
 
     @Override
@@ -75,7 +65,6 @@ public class InMemoryTaskManager implements TaskManager {
         taskHashMap.values().forEach(task -> historyManager.remove(task.getId()));
         taskHashMap.clear();
     }
-
 
     public void deleteSubtaskList() {
         Set<Epic> epicsForStatusUpdate = subtaskHashMap.values().stream()
@@ -165,13 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         taskHashMap.put(task.getId(), task);
-        if (task.getStartTime() != null) {
-            if (prioritizedTasks.stream().anyMatch(prioritizedTask -> isCrossingWith(prioritizedTask, task))) {
-                System.out.println("Задача пересекается с другой.");
-            } else {
-                prioritizedTasks.add(task);
-            }
-        }
+        checkTask(task);
     }
 
     @Override
@@ -179,13 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtaskHashMap.put(subtask.getId(), subtask);
         Epic epic = subtask.getEpic();
         calcEpicStatus(epic);
-        if (subtask.getStartTime() != null) {
-            if (prioritizedTasks.stream().anyMatch(prioritizedTask -> isCrossingWith(prioritizedTask, subtask))) {
-                System.out.println("Подзадача пересекается с другой.");
-            } else {
-                prioritizedTasks.add(subtask);
-            }
-        }
+        checkTask(subtask);
     }
 
     @Override
@@ -234,28 +211,59 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isCrossingWith(Task task1, Task task2) {
-        return isCrossing(task1, task2);
-    }
-
-    private boolean isCrossing(Task task1, Task task2) {
         return task1.getEndTime().isAfter(task2.getStartTime()) && task1.getStartTime().isBefore(task2.getEndTime());
     }
 
-    public LocalDateTime calculateEpicEndTime(Epic epic) {
-        List<Subtask> subTasks = new ArrayList<>();
-        for (int id : epic.getSubtaskIdList()) {
-            Subtask subTask = getSubtaskById(id);
-            subTasks.add(subTask);
+    private void checkTask(Task task) {
+        if (!hasCorrectTime(task)) {
+            if (prioritizedTasks.stream().anyMatch(prioritizedTask -> isCrossingWith(prioritizedTask, task))) {
+                System.out.println("Задача пересекается с другой.");
+            } else {
+                prioritizedTasks.add(task);
+            }
         }
-        if (subTasks.isEmpty()) {
-            return epic.getStartTime().plus(Duration.ZERO);
-        }
+    }
 
-        Duration totalDuration = Duration.ZERO;
-        for (Subtask st : subTasks) {
-            totalDuration = totalDuration.plus(st.getDuration());
+    private boolean hasCorrectTime(Task newTask) {
+        if (newTask.getTaskType() != TaskType.EPIC) {
+            Task task = findTaskByTime(newTask.getStartTime(), newTask.getEndTime());
+            return task == null;
         }
-        return epic.getStartTime().plus(totalDuration);
+        return true;
+    }
+
+    private Task findTaskByTime(LocalDateTime startDate, LocalDateTime endDate) {
+        if (startDate != null && endDate != null) {
+            Stream<Task> tasks = prioritizedTasks.stream()
+                    .filter(task -> task.getTaskType() != TaskType.EPIC && task.getStartTime() != null && task.getDuration() != null)
+                    .filter(task -> task.getStartTime().isAfter(startDate) && task.getEndTime().isBefore(endDate));
+            return tasks.findFirst().orElse(null);
+        }
+        return null;
+    }
+
+    private void refreshDates(Epic epic) {
+        Duration sumDuration = null;
+        LocalDateTime firstDate = epic.getStartTime();
+        LocalDateTime lastDate = epic.getEndTime();
+
+        if (epic.getSubtaskIdList() != null) {
+            for (Integer subtaskId : epic.getSubtaskIdList()) {
+                if (getSubtaskById(subtaskId).getDuration() != null && getSubtaskById(subtaskId).getStartTime() != null) {
+                    if (firstDate == null || firstDate.isAfter(getSubtaskById(subtaskId).getStartTime()))
+                        firstDate = getSubtaskById(subtaskId).getStartTime();
+                    if (lastDate == null || lastDate.isBefore(getSubtaskById(subtaskId).getEndTime()))
+                        lastDate = getSubtaskById(subtaskId).getEndTime();
+                    if (sumDuration == null)
+                        sumDuration = getSubtaskById(subtaskId).getDuration();
+                    else
+                        sumDuration = sumDuration.plus(getSubtaskById(subtaskId).getDuration());
+                }
+            }
+        }
+        epic.setDuration(sumDuration);
+        epic.setStartTime(firstDate);
+        epic.setEndTime(lastDate);
     }
 }
 

@@ -84,29 +84,12 @@ public class Task {
         taskType = TaskType.TASK;
     }
 
-    public LocalDateTime getEndTime() {
-
-        return startTime.plus(duration);
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Integer getId() {
@@ -126,9 +109,31 @@ public class Task {
     }
 
     public TaskType getTaskType() {
-        return TaskType.TASK;
+        return taskType;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime != null && duration != null)
+            return startTime.plusSeconds(duration.toSeconds());
+        else
+            return null;
+    }
 
     @Override
     public String toString() {
@@ -139,9 +144,5 @@ public class Task {
                 getDescription() + ",," +
                 getStartTime() + "," +
                 (getDuration() == Duration.ZERO ? "" : getDuration());
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

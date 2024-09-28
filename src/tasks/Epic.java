@@ -1,6 +1,5 @@
 package tasks;
 
-import logic.InMemoryTaskManager;
 import logic.TaskType;
 
 import java.time.Duration;
@@ -10,27 +9,20 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtaskIdList;
-
-    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     public Epic(Integer id, String title, String description) {
-        super(id, title, description, null);
+        super(id, title, description);
         subtaskIdList = new ArrayList<>();
         this.taskType = TaskType.EPIC;
     }
 
-    @Override
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public LocalDateTime getEndTime(InMemoryTaskManager taskManager) {
-        // Вызов метода из TaskManager
-        return taskManager.calculateEpicEndTime(this);
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     public ArrayList<Integer> getSubtaskIdList() {

@@ -91,4 +91,32 @@ public class EpicTest {
         assertEquals(TaskStatus.IN_PROGRESS, epic.getStatus());
     }
 
+    @Test
+    public void EpicDurationTest() {
+        epic = new Epic(100, "Эпик 1", "Описание эпика 1");
+        taskManager.epicCreator(epic);
+        subtask1 = new Subtask("Подзадача 1", "Описание подзадачи", TaskStatus.NEW, epic,
+                LocalDateTime.of(2022, 8, 8, 7, 8), Duration.ofMinutes(10));
+        subtask2 = new Subtask("Подзадача 2", "Описание подзадачи", TaskStatus.NEW, epic,
+                LocalDateTime.of(2022, 8, 8, 8, 8), Duration.ofMinutes(25));
+        taskManager.subtaskCreator(subtask1);
+        taskManager.subtaskCreator(subtask2);
+        assertEquals(Duration.ofMinutes(35), epic.getDuration(),
+                "Продолжительность Эпика не равна сумме продолжительности Подзадач!");
+    }
+
+    @Test
+    public void EpicDurationWithOneSubtaskNullDurationTest() {
+        epic = new Epic(100, "Эпик 1", "Описание эпика 1");
+        taskManager.epicCreator(epic);
+        subtask1 = new Subtask("Подзадача 1", "Описание подзадачи", TaskStatus.NEW, epic,
+                LocalDateTime.of(2022, 8, 6, 8, 8), null);
+        subtask2 = new Subtask("Подзадача 2", "Описание подзадачи", TaskStatus.NEW, epic,
+                LocalDateTime.of(2022, 8, 8, 8, 8), Duration.ofMinutes(25));
+        taskManager.subtaskCreator(subtask1);
+        taskManager.subtaskCreator(subtask2);
+        assertEquals(Duration.ofMinutes(25), epic.getDuration(),
+                "Продолжительность Эпика не равна сумме продолжительности Подзадач!"); //0+25=25
+    }
+
 }
