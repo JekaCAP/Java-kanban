@@ -1,7 +1,7 @@
 id,type,name,status,description,epic,startTime,duration
 20,TASK,Задача №2,NEW,Описание задачи 2,,null,null
 10,TASK,Задача №1,NEW,Описание задачи 1,,null,null
-2000,EPIC,Эпик №2,null,Без подзадач,,null,null
+2000,EPIC,Эпик №2,NEW,Без подзадач,,null,null
 1000,EPIC,Эпик №1,NEW,С тремя подзадачами,,null,null
 1,SUBTASK,Подзадача № 1,NEW,Описание подзадачи 1,1000,null,null
 2,SUBTASK,Подзадача № 2,NEW,Описание подзадачи 2,1000,null,null

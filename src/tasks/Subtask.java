@@ -35,12 +35,6 @@ public class Subtask extends Task {
         this.status = TaskStatus.NEW;
     }
 
-
-    @Override
-    public LocalDateTime getEndTime() {
-        return getStartTime().plus(duration);
-    }
-
     public Epic getEpic() {
         return epic;
     }
